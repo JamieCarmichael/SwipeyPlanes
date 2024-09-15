@@ -3,6 +3,7 @@
 
 #include "SwipeyPlanesController.h"
 #include "EnhancedInputSubsystems.h"
+#include "PlayerPawn.h"
 
 void ASwipeyPlanesController::OnPossess(APawn* aPawn)
 {
@@ -26,14 +27,11 @@ void ASwipeyPlanesController::OnPossess(APawn* aPawn)
 	InputSubsystem->AddMappingContext(InputMappingContext, 0);
 
 	 //Bind inputs
-	if (ActionDown)
+	if (TouchAction)
 	{
-		EnhancedInputComponent->BindAction(ActionDown, ETriggerEvent::Triggered, this, &ASwipeyPlanesController::HandleDown);
-	}
-
-	if (ActionUp)
-	{
-		EnhancedInputComponent->BindAction(ActionUp, ETriggerEvent::Triggered, this, &ASwipeyPlanesController::HandleUp);
+		EnhancedInputComponent->BindAction(TouchAction, ETriggerEvent::Started, this, &ASwipeyPlanesController::HandleStarted);
+		EnhancedInputComponent->BindAction(TouchAction, ETriggerEvent::Completed, this, &ASwipeyPlanesController::HandleComplete);
+		EnhancedInputComponent->BindAction(TouchAction, ETriggerEvent::Triggered, this, &ASwipeyPlanesController::HandleTriggered);
 	}
 }
 
@@ -46,22 +44,56 @@ void ASwipeyPlanesController::OnUnPossess()
 	Super::OnUnPossess();
 }
 
-void ASwipeyPlanesController::HandleDown(const FInputActionValue& InputActionValue)
+void ASwipeyPlanesController::HandleStarted(const FInputActionInstance& InputActionInstance)
 {
 	// Extract the Vector2D value from the InputActionValue
-	FVector2D MoveValue1 = InputActionValue.Get<FVector2D>();
-	//FVector move = FVector(MoveValue.X, 0, MoveValue.Y);
+	FVector2D MoveValueStarted = InputActionInstance.GetValue().Get<FVector2D>();
 
-	//PlayerPawn->AddMovementInput(move, 1.0, false);
+	UE_LOG(LogTemp, Log, TEXT("Started Value: X = %f, Y = %f"), MoveValueStarted.X, MoveValueStarted.Y);
 
-	UE_LOG(LogTemp, Log, TEXT("Down Value: X = %f, Y = %f"), MoveValue1.X, MoveValue1.Y);
+	StartedPosition = FVector(MoveValueStarted.X, MoveValueStarted.Y, 0.0f);
 }
 
-void ASwipeyPlanesController::HandleUp(const FInputActionValue& InputActionValue)
+void ASwipeyPlanesController::HandleComplete(const FInputActionInstance& InputActionInstance)
 {
 	// Extract the Vector2D value from the InputActionValue
-	FVector2D MoveValue2 = InputActionValue.Get<FVector2D>();
+	FVector2D MoveValueComplete = InputActionInstance.GetValue().Get<FVector2D>();
 
+	UE_LOG(LogTemp, Log, TEXT("Complete Value: X = %f, Y = %f"), MoveValueComplete.X, MoveValueComplete.Y);
 
-	UE_LOG(LogTemp, Log, TEXT("Up Value: X = %f, Y = %f"), MoveValue2.X, MoveValue2.Y);
+	FVector MoveVector = FVector(MoveValueComplete.Y, MoveValueComplete.X, 0.0f);
+	MoveVector = MoveVector - StartedPosition;
+	MoveVector.Normalize();
+
+	UE_LOG(LogTemp, Log, TEXT("Swipe Direction: X = %f, Y = %f"), MoveVector.X, MoveVector.Y);
+
+}
+
+void ASwipeyPlanesController::HandleTriggered(const FInputActionInstance& InputActionInstance)
+{
+	// Extract the Vector2D value from the InputActionValue
+	FVector2D MoveValueTriggered = InputActionInstance.GetValue().Get<FVector2D>();
+
+	UE_LOG(LogTemp, Log, TEXT("Triggered Value: X = %f, Y = %f"), MoveValueTriggered.X, MoveValueTriggered.Y);
+
+	FVector PawnLocation = PlayerPawn->GetActorLocation();
+
+	// Vector2D to store the screen position
+	FVector2D ScreenPosition;
+
+	// Convert to screen position
+	ProjectWorldLocationToScreen(PawnLocation, ScreenPosition);
+
+	UE_LOG(LogTemp, Log, TEXT("Screen Location: X = %f, Y = %f"), ScreenPosition.X, ScreenPosition.Y);
+	UE_LOG(LogTemp, Log, TEXT("Pawn Location: X = %f, Y = %f"), PawnLocation.X, PawnLocation.Y);
+
+	FVector MoveVector = FVector(ScreenPosition.Y - MoveValueTriggered.Y, MoveValueTriggered.X - ScreenPosition.X, 0.0f);
+	UE_LOG(LogTemp, Log, TEXT("Move Vector UnNormal: X = %f, Y = %f, Z = %f"), MoveVector.X, MoveVector.Y, MoveVector.Z);
+	MoveVector.Normalize();
+
+	if (PlayerPawn)
+	{
+		PlayerPawn->AddMovementInput(MoveVector, speed);
+		UE_LOG(LogTemp, Log, TEXT("MoveVector Normal: X = %f, Y = %f, Z = %f"), MoveVector.X, MoveVector.Y, MoveVector.Z);
+	}
 }

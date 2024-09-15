@@ -23,12 +23,18 @@ void APlayerPawn::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+    // Apply movement based on input
+    FVector Movement = GetPendingMovementInputVector();
+    if (!Movement.IsNearlyZero())
+    {
+        SetActorLocation(GetActorLocation() + Movement * DeltaTime);
+        ConsumeMovementInputVector();  // Clears the input after use
+    }
 }
 
 // Called to bind functionality to input
 void APlayerPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
-
 }
 

@@ -20,21 +20,23 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "PlayerInput|CharacterMovement")
 	TObjectPtr<UInputMappingContext> InputMappingContext = nullptr;
 
-	// Down Action
+	// touch input Action
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "PlayerInput|CharacterMovement")
-	UInputAction* ActionDown = nullptr;
+	UInputAction* TouchAction = nullptr;
 
-	// Up Action
+	// touch input Action
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "PlayerInput|CharacterMovement")
-	UInputAction* ActionUp = nullptr;
+	float speed = 100.0f;
+
 
 
 protected:
 	virtual void OnPossess(APawn* aPawn) override;
 	virtual void OnUnPossess() override;
 
-	void HandleDown(const FInputActionValue& InputActionValue);
-	void HandleUp(const FInputActionValue& InputActionValue);
+	void HandleStarted(const FInputActionInstance& InputActionValue);
+	void HandleComplete(const FInputActionInstance& InputActionValue);
+	void HandleTriggered(const FInputActionInstance& InputActionValue);
 
 private:
 	 //Used to store references for inputs
@@ -43,4 +45,7 @@ private:
 
 	UPROPERTY()
 	APlayerPawn* PlayerPawn = nullptr;
+
+	UPROPERTY()
+	FVector StartedPosition = FVector(0,0,0);
 };
