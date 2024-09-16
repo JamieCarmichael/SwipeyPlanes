@@ -49,51 +49,45 @@ void ASwipeyPlanesController::HandleStarted(const FInputActionInstance& InputAct
 	// Extract the Vector2D value from the InputActionValue
 	FVector2D MoveValueStarted = InputActionInstance.GetValue().Get<FVector2D>();
 
-	UE_LOG(LogTemp, Log, TEXT("Started Value: X = %f, Y = %f"), MoveValueStarted.X, MoveValueStarted.Y);
-
-	StartedPosition = FVector(MoveValueStarted.X, MoveValueStarted.Y, 0.0f);
+	StartedPosition = FVector2D(MoveValueStarted.X, MoveValueStarted.Y);
 }
 
 void ASwipeyPlanesController::HandleComplete(const FInputActionInstance& InputActionInstance)
 {
 	// Extract the Vector2D value from the InputActionValue
-	FVector2D MoveValueComplete = InputActionInstance.GetValue().Get<FVector2D>();
+	FVector2D MoveValue = StartedPosition - LastPosition;
 
-	UE_LOG(LogTemp, Log, TEXT("Complete Value: X = %f, Y = %f"), MoveValueComplete.X, MoveValueComplete.Y);
 
-	FVector MoveVector = FVector(MoveValueComplete.Y, MoveValueComplete.X, 0.0f);
-	MoveVector = MoveVector - StartedPosition;
+	FVector MoveVector = FVector(MoveValue.Y, -MoveValue.X, 0.0f);
+	float magnatude = MoveVector.Size();
 	MoveVector.Normalize();
 
-	UE_LOG(LogTemp, Log, TEXT("Swipe Direction: X = %f, Y = %f"), MoveVector.X, MoveVector.Y);
-
+	if (PlayerPawn)
+	{
+		PlayerPawn->AddMovementInput(MoveVector, magnatude * speed);
+	}
 }
 
 void ASwipeyPlanesController::HandleTriggered(const FInputActionInstance& InputActionInstance)
 {
 	// Extract the Vector2D value from the InputActionValue
 	FVector2D MoveValueTriggered = InputActionInstance.GetValue().Get<FVector2D>();
-
-	UE_LOG(LogTemp, Log, TEXT("Triggered Value: X = %f, Y = %f"), MoveValueTriggered.X, MoveValueTriggered.Y);
+	LastPosition = FVector2D(MoveValueTriggered.X, MoveValueTriggered.Y);
 
 	FVector PawnLocation = PlayerPawn->GetActorLocation();
 
 	// Vector2D to store the screen position
-	FVector2D ScreenPosition;
+	//FVector2D ScreenPosition;
 
 	// Convert to screen position
-	ProjectWorldLocationToScreen(PawnLocation, ScreenPosition);
+	//ProjectWorldLocationToScreen(PawnLocation, ScreenPosition);
 
-	UE_LOG(LogTemp, Log, TEXT("Screen Location: X = %f, Y = %f"), ScreenPosition.X, ScreenPosition.Y);
-	UE_LOG(LogTemp, Log, TEXT("Pawn Location: X = %f, Y = %f"), PawnLocation.X, PawnLocation.Y);
+	//FVector MoveVector = FVector(ScreenPosition.Y - MoveValueTriggered.Y, MoveValueTriggered.X - ScreenPosition.X, 0.0f);
 
-	FVector MoveVector = FVector(ScreenPosition.Y - MoveValueTriggered.Y, MoveValueTriggered.X - ScreenPosition.X, 0.0f);
-	UE_LOG(LogTemp, Log, TEXT("Move Vector UnNormal: X = %f, Y = %f, Z = %f"), MoveVector.X, MoveVector.Y, MoveVector.Z);
-	MoveVector.Normalize();
+	//MoveVector.Normalize();
 
-	if (PlayerPawn)
-	{
-		PlayerPawn->AddMovementInput(MoveVector, speed);
-		UE_LOG(LogTemp, Log, TEXT("MoveVector Normal: X = %f, Y = %f, Z = %f"), MoveVector.X, MoveVector.Y, MoveVector.Z);
-	}
+	//if (PlayerPawn)
+	//{
+	//	PlayerPawn->AddMovementInput(MoveVector, speed);
+	//}
 }

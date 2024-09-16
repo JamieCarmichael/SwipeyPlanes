@@ -15,6 +15,10 @@ public:
 	// Sets default values for this pawn's properties
 	APlayerPawn();
 
+	// touch input Action
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "PlayerInput|CharacterMovement")
+	float TimeToMove = 3.0f;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -29,4 +33,6 @@ public:
 
 private:
 
+	FVector MovementVector = FVector(0, 0, 0);
+	float MoveTimer = 0;
 };

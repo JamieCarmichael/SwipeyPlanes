@@ -16,6 +16,7 @@ void APlayerPawn::BeginPlay()
 {
 	Super::BeginPlay();
 	
+    MoveTimer = TimeToMove;
 }
 
 // Called every frame
@@ -27,9 +28,17 @@ void APlayerPawn::Tick(float DeltaTime)
     FVector Movement = GetPendingMovementInputVector();
     if (!Movement.IsNearlyZero())
     {
-        SetActorLocation(GetActorLocation() + Movement * DeltaTime);
+        MovementVector = Movement / TimeToMove;
+        MoveTimer = 0;
         ConsumeMovementInputVector();  // Clears the input after use
     }
+
+    if (MoveTimer < TimeToMove)
+    {
+        SetActorLocation(GetActorLocation() + (MovementVector * DeltaTime));
+        MoveTimer = MoveTimer + DeltaTime;
+    }
+
 }
 
 // Called to bind functionality to input

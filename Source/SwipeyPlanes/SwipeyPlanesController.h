@@ -47,5 +47,6 @@ private:
 	APlayerPawn* PlayerPawn = nullptr;
 
 	UPROPERTY()
-	FVector StartedPosition = FVector(0,0,0);
+	FVector2D StartedPosition = FVector2D(0,0);
+	FVector2D LastPosition = FVector2D(0,0);
 };
