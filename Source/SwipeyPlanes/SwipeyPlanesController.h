@@ -34,8 +34,6 @@ protected:
 	virtual void OnPossess(APawn* aPawn) override;
 	virtual void OnUnPossess() override;
 
-	void HandleStarted(const FInputActionInstance& InputActionValue);
-	void HandleComplete(const FInputActionInstance& InputActionValue);
 	void HandleTriggered(const FInputActionInstance& InputActionValue);
 
 private:

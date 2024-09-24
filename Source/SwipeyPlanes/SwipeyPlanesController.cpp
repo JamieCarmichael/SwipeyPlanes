@@ -29,8 +29,6 @@ void ASwipeyPlanesController::OnPossess(APawn* aPawn)
 	 //Bind inputs
 	if (TouchAction)
 	{
-		EnhancedInputComponent->BindAction(TouchAction, ETriggerEvent::Started, this, &ASwipeyPlanesController::HandleStarted);
-		EnhancedInputComponent->BindAction(TouchAction, ETriggerEvent::Completed, this, &ASwipeyPlanesController::HandleComplete);
 		EnhancedInputComponent->BindAction(TouchAction, ETriggerEvent::Triggered, this, &ASwipeyPlanesController::HandleTriggered);
 	}
 }
@@ -44,19 +42,20 @@ void ASwipeyPlanesController::OnUnPossess()
 	Super::OnUnPossess();
 }
 
-void ASwipeyPlanesController::HandleStarted(const FInputActionInstance& InputActionInstance)
+void ASwipeyPlanesController::HandleTriggered(const FInputActionInstance& InputActionInstance)
 {
 	// Extract the Vector2D value from the InputActionValue
-	FVector2D MoveValueStarted = InputActionInstance.GetValue().Get<FVector2D>();
+	FVector2D MoveValueTriggered = InputActionInstance.GetValue().Get<FVector2D>();
+	LastPosition = FVector2D(MoveValueTriggered.X, MoveValueTriggered.Y);
 
-	StartedPosition = FVector2D(MoveValueStarted.X, MoveValueStarted.Y);
-}
+	FVector PawnLocation = PlayerPawn->GetActorLocation();
+	// Vector2D to store the screen position
+	FVector2D ScreenPosition;
 
-void ASwipeyPlanesController::HandleComplete(const FInputActionInstance& InputActionInstance)
-{
-	// Extract the Vector2D value from the InputActionValue
-	FVector2D MoveValue = StartedPosition - LastPosition;
+	 //Convert to screen position
+	ProjectWorldLocationToScreen(PawnLocation, ScreenPosition);
 
+	FVector2D MoveValue = ScreenPosition - LastPosition;
 
 	FVector MoveVector = FVector(MoveValue.Y, -MoveValue.X, 0.0f);
 	float magnatude = MoveVector.Size();
@@ -66,28 +65,4 @@ void ASwipeyPlanesController::HandleComplete(const FInputActionInstance& InputAc
 	{
 		PlayerPawn->AddMovementInput(MoveVector, magnatude * speed);
 	}
-}
-
-void ASwipeyPlanesController::HandleTriggered(const FInputActionInstance& InputActionInstance)
-{
-	// Extract the Vector2D value from the InputActionValue
-	FVector2D MoveValueTriggered = InputActionInstance.GetValue().Get<FVector2D>();
-	LastPosition = FVector2D(MoveValueTriggered.X, MoveValueTriggered.Y);
-
-	FVector PawnLocation = PlayerPawn->GetActorLocation();
-
-	// Vector2D to store the screen position
-	//FVector2D ScreenPosition;
-
-	// Convert to screen position
-	//ProjectWorldLocationToScreen(PawnLocation, ScreenPosition);
-
-	//FVector MoveVector = FVector(ScreenPosition.Y - MoveValueTriggered.Y, MoveValueTriggered.X - ScreenPosition.X, 0.0f);
-
-	//MoveVector.Normalize();
-
-	//if (PlayerPawn)
-	//{
-	//	PlayerPawn->AddMovementInput(MoveVector, speed);
-	//}
 }

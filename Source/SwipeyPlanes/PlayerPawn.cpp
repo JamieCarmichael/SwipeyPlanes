@@ -24,18 +24,21 @@ void APlayerPawn::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+
     // Apply movement based on input
     FVector Movement = GetPendingMovementInputVector();
     if (!Movement.IsNearlyZero())
     {
+        // scale the movement vector by the time to move.
         MovementVector = Movement / TimeToMove;
         MoveTimer = 0;
         ConsumeMovementInputVector();  // Clears the input after use
     }
 
+    // Move the player over time.
     if (MoveTimer < TimeToMove)
     {
-        SetActorLocation(GetActorLocation() + (MovementVector * DeltaTime));
+        SetActorLocation(GetActorLocation() + (MovementVector * (1 - (MoveTimer/TimeToMove)) * DeltaTime));
         MoveTimer = MoveTimer + DeltaTime;
     }
 
