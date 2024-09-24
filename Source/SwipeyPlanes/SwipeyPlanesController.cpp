@@ -46,7 +46,7 @@ void ASwipeyPlanesController::HandleTriggered(const FInputActionInstance& InputA
 {
 	// Extract the Vector2D value from the InputActionValue
 	FVector2D MoveValueTriggered = InputActionInstance.GetValue().Get<FVector2D>();
-	LastPosition = FVector2D(MoveValueTriggered.X, MoveValueTriggered.Y);
+	FVector2D NewPosition = FVector2D(MoveValueTriggered.X, MoveValueTriggered.Y);
 
 	FVector PawnLocation = PlayerPawn->GetActorLocation();
 	// Vector2D to store the screen position
@@ -55,9 +55,9 @@ void ASwipeyPlanesController::HandleTriggered(const FInputActionInstance& InputA
 	 //Convert to screen position
 	ProjectWorldLocationToScreen(PawnLocation, ScreenPosition);
 
-	FVector2D MoveValue = ScreenPosition - LastPosition;
+	FVector2D MoveValue = ScreenPosition - NewPosition;
 
-	FVector MoveVector = FVector(MoveValue.Y, -MoveValue.X, 0.0f);
+	FVector MoveVector = FVector(-MoveValue.X, 0.0f, MoveValue.Y);
 	float magnatude = MoveVector.Size();
 	MoveVector.Normalize();
 
