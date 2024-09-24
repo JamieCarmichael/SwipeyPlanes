@@ -12,15 +12,11 @@ AMyPaperTileMapActor::AMyPaperTileMapActor()
 void AMyPaperTileMapActor::BeginPlay()
 {
 	Super::BeginPlay();
-
-	UE_LOG(LogTemp, Log, TEXT("Begin"));
 }
 
 void AMyPaperTileMapActor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
-	UE_LOG(LogTemp, Log, TEXT("Tick"));
 
 	FVector movePos = GetActorLocation() + (moveDirection * speed * DeltaTime);
 
@@ -29,6 +25,4 @@ void AMyPaperTileMapActor::Tick(float DeltaTime)
 	{
 		SetActorLocation(GetActorLocation() - (moveDirection * teleportMove));
 	}
-
-	UE_LOG(LogTemp, Log, TEXT("Move Position: X = %f, Z = %f"), movePos.X, movePos.Z);
 }

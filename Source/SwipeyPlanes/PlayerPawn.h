@@ -19,6 +19,7 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "PlayerInput|CharacterMovement")
 	float TimeToMove = 3.0f;
 
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
