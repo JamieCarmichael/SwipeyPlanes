@@ -15,8 +15,6 @@ APlayerPawn::APlayerPawn()
 void APlayerPawn::BeginPlay()
 {
 	Super::BeginPlay();
-	
-    MoveTimer = TimeToMove;
 }
 
 // Called every frame
@@ -30,16 +28,17 @@ void APlayerPawn::Tick(float DeltaTime)
     if (!Movement.IsNearlyZero())
     {
         // scale the movement vector by the time to move.
-        MovementVector = Movement / TimeToMove;
-        MoveTimer = 0;
+        MovementVector = Movement.GetSafeNormal();
+        MovementMagnatude = Movement.Size();
         ConsumeMovementInputVector();  // Clears the input after use
     }
 
     // Move the player over time.
-    if (MoveTimer < TimeToMove)
+    if (!FMath::IsNearlyZero(MovementMagnatude))
     {
-        SetActorLocation(GetActorLocation() + (MovementVector * (1 - (MoveTimer/TimeToMove)) * DeltaTime));
-        MoveTimer = MoveTimer + DeltaTime;
+        float moveStep = MovementMagnatude / TimeToMove * DeltaTime;
+        SetActorLocation(GetActorLocation() + (MovementVector * moveStep));
+        MovementMagnatude -= moveStep;
     }
 
 }

@@ -35,5 +35,5 @@ public:
 private:
 
 	FVector MovementVector = FVector(0, 0, 0);
-	float MoveTimer = 0;
+	float MovementMagnatude = 0;
 };
