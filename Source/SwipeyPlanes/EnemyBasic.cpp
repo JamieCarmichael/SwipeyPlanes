@@ -3,7 +3,6 @@
 
 #include "EnemyBasic.h"
 #include "Components/BoxComponent.h"
-#include "DrawDebugHelpers.h"
 #include "PlayerProjectile.h"
 
 // Sets default values
@@ -42,11 +41,6 @@ void AEnemyBasic::Tick(float DeltaTime)
 {
     Super::Tick(DeltaTime);
 
-    // Draw a debug box for visualization
-    DrawDebugBox(GetWorld(), MyBoxComponent->GetComponentLocation(), MyBoxComponent->GetScaledBoxExtent(), FColor::Green, false, -1, 0, 1);
-
-
-
     // Get the forward vector of the actor (the direction it's facing)
     FVector ForwardVector = GetActorUpVector();
 
@@ -84,7 +78,7 @@ void AEnemyBasic::OnOverlapBegin(UPrimitiveComponent * OverlappedComponent, AAct
             health -= Projectile->Damage;
             if (health <= 0)
             {
-                PlayExplosionEffect();
+                Destroy();
             }
 
             UE_LOG(LogTemp, Warning, TEXT("Damage taken: %d"), Projectile -> Damage);
@@ -95,23 +89,6 @@ void AEnemyBasic::OnOverlapBegin(UPrimitiveComponent * OverlappedComponent, AAct
             Projectile->Destroy();
         }
     }
-}
-
-void AEnemyBasic::PlayExplosionEffect()
-{
-    if (ExplosionEffectClass)
-    {
-        // Spawn the explosion effect at the actor's location and rotation
-        AExplosionEffect* Explosion = GetWorld()->SpawnActor<AExplosionEffect>(ExplosionEffectClass, GetActorLocation(), GetActorRotation());
-    }
-
-    // Destroy the enemy after playing the explosion effect
-    Destroy();
-}
-
-void AEnemyBasic::DestroyEnemy()
-{
-    Destroy();
 }
 
 

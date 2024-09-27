@@ -2,10 +2,7 @@
 
 #pragma once
 
-#include "ExplosionEffect.h"
-#include "PaperFlipbookComponent.h"
 #include "Components/BoxComponent.h"
-#include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "EnemyBasic.generated.h"
 
@@ -30,15 +27,6 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	UBoxComponent* MyBoxComponent;
 
-	// Play the explosion Effect
-	UFUNCTION()
-	void PlayExplosionEffect();
-
-	// Kill this after explosion
-	UFUNCTION()
-	void DestroyEnemy();
-
-
 public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -53,11 +41,7 @@ public:
 
 	// How long the enemy will exist before being destroyed.
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "EnemyHealth")
-	int health = 2;
-
-	// The explosion on death
-	UPROPERTY(EditAnywhere, Category = "EnemyHealth")
-	TSubclassOf<AExplosionEffect> ExplosionEffectClass;
+	int health = 1;
 
 
 private:
