@@ -5,6 +5,7 @@
 #include "Components/BoxComponent.h"
 #include "PlayerProjectile.h"
 #include "ExplosionEffect.h"
+#include "PlayerPawn.h"
 
 // Sets default values
 AEnemyBasic::AEnemyBasic()
@@ -69,7 +70,6 @@ void AEnemyBasic::OnOverlapBegin(UPrimitiveComponent * OverlappedComponent, AAct
     if (OtherActor && (OtherActor != this))
     {
         // Handle overlap logic here
-        UE_LOG(LogTemp, Warning, TEXT("Overlap began with: %s"), *OtherActor->GetName());
 
         // Check if the OtherActor is a bullet (by class)
         APlayerProjectile* Projectile = Cast<APlayerProjectile>(OtherActor);
@@ -79,13 +79,26 @@ void AEnemyBasic::OnOverlapBegin(UPrimitiveComponent * OverlappedComponent, AAct
             health -= Projectile->Damage;
             if (health <= 0)
             {
-                GetWorld()->SpawnActor<AActor>(Explsion, GetActorLocation(), GetActorRotation());
+                GetWorld()->SpawnActor<AActor>(Explosion, GetActorLocation(), GetActorRotation());
                 Destroy();
             }
 
             // Optionally, you could destroy the bullet after it hits
             Projectile->Destroy();
+
+            return;
         }
+
+        // Check if the OtherActor is a bullet (by class)
+        APlayerPawn* playerPawn = Cast<APlayerPawn>(OtherActor);
+        if (playerPawn)
+        {
+            playerPawn -> TakeDamage(damage);
+
+            GetWorld()->SpawnActor<AActor>(Explosion, GetActorLocation(), GetActorRotation());
+            Destroy();
+        }
+
     }
 }
 

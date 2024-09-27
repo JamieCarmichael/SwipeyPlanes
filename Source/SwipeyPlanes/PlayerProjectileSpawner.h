@@ -33,7 +33,14 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Projectile Spawner")
 	float TimeBetweenProjectiles = 0.5f;
 
+	// Called when the player dies.
+	UFUNCTION()
+	void StopSpawning();
+
 private:
 	float projectileTimer;
+
+	// Controls whether the spawner is active or not
+	bool IsSpawnerActive = true;
 
 };

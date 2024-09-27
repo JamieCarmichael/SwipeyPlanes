@@ -24,13 +24,21 @@ void APlayerProjectileSpawner::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	// Fire Projectiles
-	projectileTimer += DeltaTime;
-	if (projectileTimer > TimeBetweenProjectiles)
+	if (IsSpawnerActive)
 	{
-		GetWorld()->SpawnActor<APlayerProjectile>(projectile, GetActorLocation(), GetActorRotation());
-		projectileTimer = 0.0f;
+		// Fire Projectiles
+		projectileTimer += DeltaTime;
+		if (projectileTimer > TimeBetweenProjectiles)
+		{
+			GetWorld()->SpawnActor<APlayerProjectile>(projectile, GetActorLocation(), GetActorRotation());
+			projectileTimer = 0.0f;
+		}
 	}
+}
 
+void APlayerProjectileSpawner::StopSpawning()
+{
+	IsSpawnerActive = false;
+	PrimaryActorTick.bCanEverTick = false;
 }
 

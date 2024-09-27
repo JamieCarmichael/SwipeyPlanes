@@ -45,7 +45,11 @@ public:
 
 	// The Explosion.
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "EnemyHealth")
-	TSubclassOf<class AActor> Explsion;
+	TSubclassOf<class AActor> Explosion;
+
+	// Damage done to player on collision.
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "EnemyDamage")
+	int damage = 1;
 
 private:
 	float lifeTimer = 0;
