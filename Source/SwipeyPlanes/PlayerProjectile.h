@@ -25,6 +25,10 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "ProjectileMovement")
 	float liftime = 3.0f;
 
+	// How long the projectile will exist before being destroyed.
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "ProjectileDamage")
+	int Damage = 1;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

@@ -4,6 +4,7 @@
 #include "EnemyBasic.h"
 #include "Components/BoxComponent.h"
 #include "DrawDebugHelpers.h"
+#include "PlayerProjectile.h"
 
 // Sets default values
 AEnemyBasic::AEnemyBasic()
@@ -70,11 +71,47 @@ void AEnemyBasic::Tick(float DeltaTime)
 // Called when the BoxComponent overlaps with another actor
 void AEnemyBasic::OnOverlapBegin(UPrimitiveComponent * OverlappedComponent, AActor * OtherActor, UPrimitiveComponent * OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult)
 {
-    if (OtherActor)
+    if (OtherActor && (OtherActor != this))
     {
         // Handle overlap logic here
         UE_LOG(LogTemp, Warning, TEXT("Overlap began with: %s"), *OtherActor->GetName());
+
+        // Check if the OtherActor is a bullet (by class)
+        APlayerProjectile* Projectile = Cast<APlayerProjectile>(OtherActor);
+        if (Projectile)
+        {
+            // Apply damage to this actor
+            health -= Projectile->Damage;
+            if (health <= 0)
+            {
+                PlayExplosionEffect();
+            }
+
+            UE_LOG(LogTemp, Warning, TEXT("Damage taken: %d"), Projectile -> Damage);
+            UE_LOG(LogTemp, Warning, TEXT("Health Remaining: %d"), health);
+
+
+            // Optionally, you could destroy the bullet after it hits
+            Projectile->Destroy();
+        }
     }
+}
+
+void AEnemyBasic::PlayExplosionEffect()
+{
+    if (ExplosionEffectClass)
+    {
+        // Spawn the explosion effect at the actor's location and rotation
+        AExplosionEffect* Explosion = GetWorld()->SpawnActor<AExplosionEffect>(ExplosionEffectClass, GetActorLocation(), GetActorRotation());
+    }
+
+    // Destroy the enemy after playing the explosion effect
+    Destroy();
+}
+
+void AEnemyBasic::DestroyEnemy()
+{
+    Destroy();
 }
 
 
