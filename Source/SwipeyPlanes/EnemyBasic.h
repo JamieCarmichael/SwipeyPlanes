@@ -43,6 +43,9 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "EnemyHealth")
 	int health = 1;
 
+	// The Explosion.
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "EnemyHealth")
+	TSubclassOf<class AActor> Explsion;
 
 private:
 	float lifeTimer = 0;

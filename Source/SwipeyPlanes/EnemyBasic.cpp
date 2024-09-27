@@ -4,6 +4,7 @@
 #include "EnemyBasic.h"
 #include "Components/BoxComponent.h"
 #include "PlayerProjectile.h"
+#include "ExplosionEffect.h"
 
 // Sets default values
 AEnemyBasic::AEnemyBasic()
@@ -78,12 +79,9 @@ void AEnemyBasic::OnOverlapBegin(UPrimitiveComponent * OverlappedComponent, AAct
             health -= Projectile->Damage;
             if (health <= 0)
             {
+                GetWorld()->SpawnActor<AActor>(Explsion, GetActorLocation(), GetActorRotation());
                 Destroy();
             }
-
-            UE_LOG(LogTemp, Warning, TEXT("Damage taken: %d"), Projectile -> Damage);
-            UE_LOG(LogTemp, Warning, TEXT("Health Remaining: %d"), health);
-
 
             // Optionally, you could destroy the bullet after it hits
             Projectile->Destroy();
