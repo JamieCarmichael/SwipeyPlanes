@@ -51,6 +51,12 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "EnemyDamage")
 	int damage = 1;
 
+	// Damage done to player on collision.
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "EnemyDamage")
+	int pointsForKill = 10;
+
+
+
 private:
 	float lifeTimer = 0;
 

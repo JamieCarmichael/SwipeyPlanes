@@ -6,6 +6,7 @@
 #include "PlayerProjectile.h"
 #include "ExplosionEffect.h"
 #include "PlayerPawn.h"
+#include <Kismet/GameplayStatics.h>
 
 // Sets default values
 AEnemyBasic::AEnemyBasic()
@@ -79,6 +80,14 @@ void AEnemyBasic::OnOverlapBegin(UPrimitiveComponent * OverlappedComponent, AAct
             health -= Projectile->Damage;
             if (health <= 0)
             {
+                // Add score
+                APlayerPawn* playerPawn = Cast<APlayerPawn>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
+                if (playerPawn)
+                {
+                    playerPawn->PlayerAddScore(pointsForKill);
+                }
+
+                // Destroy this
                 GetWorld()->SpawnActor<AActor>(Explosion, GetActorLocation(), GetActorRotation());
                 Destroy();
             }

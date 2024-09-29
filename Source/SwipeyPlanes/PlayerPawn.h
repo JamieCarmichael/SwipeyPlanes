@@ -44,9 +44,13 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-	// Correctly defined overlap function
+	// Reduce player health
 	UFUNCTION()
 	void PlayerTakeDamage(int damage);
+
+	// Add score to player
+	UFUNCTION()
+	void PlayerAddScore(int newScore);
 
 	// Called when the player dies.
 	UFUNCTION()

@@ -32,7 +32,7 @@ void APlayerPawn::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-    score = GetWorld()->GetTimeSeconds();
+    //score = GetWorld()->GetTimeSeconds();
 
     // Apply movement based on input
     FVector Movement = GetPendingMovementInputVector();
@@ -71,6 +71,11 @@ void APlayerPawn::PlayerTakeDamage(int damage)
 
         OnPlayerDeath();
     }
+}
+
+void APlayerPawn::PlayerAddScore(int newScore)
+{
+    score += newScore;
 }
 
 void APlayerPawn::OnPlayerDeath()
