@@ -32,6 +32,7 @@ void APlayerPawn::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+    score = GetWorld()->GetTimeSeconds();
 
     // Apply movement based on input
     FVector Movement = GetPendingMovementInputVector();
@@ -59,7 +60,7 @@ void APlayerPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 }
 
-void APlayerPawn::TakeDamage(int damage)
+void APlayerPawn::PlayerTakeDamage(int damage)
 {
 
     health -= damage;
@@ -86,6 +87,6 @@ void APlayerPawn::OnPlayerDeath()
     PrimaryActorTick.SetTickFunctionEnable(false);
 
     // Need to disable spawner
-
+    ProjectileSpawner -> StopSpawning();
 }
 

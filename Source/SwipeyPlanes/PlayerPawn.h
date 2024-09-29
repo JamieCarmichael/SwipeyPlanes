@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include "PlayerProjectileSpawner.h"
 #include "PaperSpriteComponent.h"
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
@@ -17,20 +18,24 @@ public:
 	APlayerPawn();
 
 	// touch input Action
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Player Movement")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Player Pawn")
 	float TimeToMove = 3.0f;
 
 	// touch input Action
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Player Health")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Player Pawn")
 	int StartHealth = 5;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Player Pawn")
+	int health = 0;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Player Pawn")
+	int score = 0;
 
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	UPROPERTY(BlueprintReadOnly)
-	int health = 0;
 
 public:	
 	// Called every frame
@@ -41,9 +46,9 @@ public:
 
 	// Correctly defined overlap function
 	UFUNCTION()
-	void TakeDamage(int damage);
+	void PlayerTakeDamage(int damage);
 
-	// Called when the playuer dies.
+	// Called when the player dies.
 	UFUNCTION()
 	void OnPlayerDeath();
 
@@ -52,8 +57,12 @@ public:
 	TSubclassOf<class AActor> Explosion;
 
 	// The projectile being spawned.
-	UPROPERTY(EditAnywhere, Category = "Player Health")
+	UPROPERTY(EditAnywhere, Category = "Player Pawn")
 	UPaperSpriteComponent* PaperSprite;
+
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player Pawn")
+	APlayerProjectileSpawner* ProjectileSpawner;
 
 
 private:

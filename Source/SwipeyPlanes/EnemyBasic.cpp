@@ -93,7 +93,7 @@ void AEnemyBasic::OnOverlapBegin(UPrimitiveComponent * OverlappedComponent, AAct
         APlayerPawn* playerPawn = Cast<APlayerPawn>(OtherActor);
         if (playerPawn)
         {
-            playerPawn -> TakeDamage(damage);
+            playerPawn ->PlayerTakeDamage(damage);
 
             GetWorld()->SpawnActor<AActor>(Explosion, GetActorLocation(), GetActorRotation());
             Destroy();

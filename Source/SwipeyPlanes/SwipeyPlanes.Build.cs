@@ -16,7 +16,8 @@ public class SwipeyPlanes : ModuleRules
 			"NavigationSystem", 
 			"AIModule", 
 			"Niagara", 
-			"EnhancedInput" 
+			"EnhancedInput", 
+			"UMG"
 		});
     }
 }
