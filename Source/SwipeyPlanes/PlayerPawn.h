@@ -57,7 +57,7 @@ public:
 	void OnPlayerDeath();
 
 	// The Explosion.
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Player Health")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Player Pawn")
 	TSubclassOf<class AActor> Explosion;
 
 	// The projectile being spawned.
@@ -68,10 +68,11 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player Pawn")
 	APlayerProjectileSpawner* ProjectileSpawner;
 
+	// touch input Action
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Player Pawn")
+	float speed = 2.0f;
 
 private:
 
-	FVector MovementVector = FVector(0, 0, 0);
-	float MovementMagnatude = 0;
-
+	FVector Destination = FVector(0, 0, 0);
 };

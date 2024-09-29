@@ -38,18 +38,18 @@ void APlayerPawn::Tick(float DeltaTime)
     FVector Movement = GetPendingMovementInputVector();
     if (!Movement.IsNearlyZero())
     {
-        // scale the movement vector by the time to move.
-        MovementVector = Movement.GetSafeNormal();
-        MovementMagnatude = Movement.Size();
+        Destination = GetActorLocation() + Movement;
         ConsumeMovementInputVector();  // Clears the input after use
     }
 
-    // Move the player over time.
-    if (!FMath::IsNearlyZero(MovementMagnatude))
+    // Add movement
+    FVector actorLocation = GetActorLocation();
+    float Distance = FVector::Dist(actorLocation, Destination);
+    if (!FMath::IsNearlyZero(Distance))
     {
-        float moveStep = MovementMagnatude / TimeToMove * DeltaTime;
-        SetActorLocation(GetActorLocation() + (MovementVector * moveStep));
-        MovementMagnatude -= moveStep;
+        FVector direction = Destination - actorLocation;
+        
+        SetActorLocation(actorLocation + (direction * speed * DeltaTime));
     }
 
 }

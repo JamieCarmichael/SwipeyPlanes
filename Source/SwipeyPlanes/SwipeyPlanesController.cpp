@@ -57,12 +57,10 @@ void ASwipeyPlanesController::HandleTriggered(const FInputActionInstance& InputA
 
 	FVector2D MoveValue = ScreenPosition - NewPosition;
 
-	FVector MoveVector = FVector(-MoveValue.X, 0.0f, MoveValue.Y) + offsetVector;
-	float magnatude = MoveVector.Size();
-	MoveVector.Normalize();
+	FVector MoveVector = FVector(-MoveValue.X, 0.0f, MoveValue.Y);
 
 	if (PlayerPawn)
 	{
-		PlayerPawn->AddMovementInput(MoveVector, magnatude * speed);
+		PlayerPawn->AddMovementInput(MoveVector, 1.0f);
 	}
 }
