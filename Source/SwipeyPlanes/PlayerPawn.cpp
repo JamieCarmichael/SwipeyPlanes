@@ -4,8 +4,10 @@
 #include "PlayerPawn.h"
 #include "ExplosionEffect.h"
 #include "SwipeyPlanesController.h"
-#include <Actions/PawnAction.h>
+#include "Actions/PawnAction.h"
 #include "PaperSpriteComponent.h"
+#include "Kismet/GameplayStatics.h"
+#include "EnemySpawner.h"
 
 // Sets default values
 APlayerPawn::APlayerPawn()
@@ -24,12 +26,17 @@ void APlayerPawn::BeginPlay()
 {
 	Super::BeginPlay();
 
-    health = StartHealth;
+    OnPlayerDespawn();
 }
 
 // Called every frame
 void APlayerPawn::Tick(float DeltaTime)
 {
+    if (!isActive)
+    {
+        return;
+    }
+
 	Super::Tick(DeltaTime);
 
     //score = GetWorld()->GetTimeSeconds();
@@ -51,7 +58,6 @@ void APlayerPawn::Tick(float DeltaTime)
         
         SetActorLocation(actorLocation + (direction * speed * DeltaTime));
     }
-
 }
 
 // Called to bind functionality to input
@@ -69,7 +75,7 @@ void APlayerPawn::PlayerTakeDamage(int damage)
     {
         GetWorld()->SpawnActor<AActor>(Explosion, GetActorLocation(), GetActorRotation());
 
-        OnPlayerDeath();
+        OnPlayerDespawn();
     }
 }
 
@@ -78,40 +84,70 @@ void APlayerPawn::PlayerAddScore(int newScore)
     score += newScore;
 }
 
-void APlayerPawn::OnPlayerDeath()
+void APlayerPawn::OnPlayerDespawn()
 {
+    isActive = false;
+
     // Hide the player character
     SetActorHiddenInGame(true);
 
     // Disable collision
     SetActorEnableCollision(false);
 
-    // Optionally disable tick
+    // disable tick
     PrimaryActorTick.SetTickFunctionEnable(false);
 
     // Need to disable spawner
     ProjectileSpawner -> StopSpawning();
+
+    // Disable enemy spanwers
+    TArray<AActor*> FoundSpawners;
+    UGameplayStatics::GetAllActorsOfClass(GetWorld(), AEnemySpawner::StaticClass(), FoundSpawners);    
+    for (AActor* Actor : FoundSpawners)
+    {
+        AEnemySpawner* Spawner = Cast<AEnemySpawner>(Actor);
+        if (Spawner)
+        {
+            Spawner->SetSpawningEnabled(false);
+        }
+    }
 }
 
 void APlayerPawn::OnPlayerSpawn()
 {
-    // Hide the player character
+    isActive = true;
+
+    // Reset health
+    health = StartHealth;
+    score = 0;
+
+    // show the player character
     SetActorHiddenInGame(false);
 
-    // Disable collision
+    // enable collision
     SetActorEnableCollision(true);
 
-    // Optionally disable tick
+    // enable tick
     PrimaryActorTick.SetTickFunctionEnable(true);
 
     // Need to disable spawner
     ProjectileSpawner->StartSpawning();
 
-    // Set to centre of screen
-    FVector2D ScreenSize;
-    GEngine->GameViewport->GetViewportSize(ScreenSize);
-    FVector2D ScreenCenter = FVector2D(ScreenSize.X / 2.0f, ScreenSize.Y / 2.0f);
-    FVector CenterPos = FVector(-ScreenCenter.X, 0.0f, ScreenCenter.Y);
-    SetActorLocation(CenterPos);
+    // Spawn player in center of screen
+    Destination = SpawnPosition;
+    SetActorLocation(SpawnPosition);
+
+    // Enable enemy spanwers
+    TArray<AActor*> FoundSpawners;
+    UGameplayStatics::GetAllActorsOfClass(GetWorld(), AEnemySpawner::StaticClass(), FoundSpawners);
+    for (AActor* Actor : FoundSpawners)
+    {
+        AEnemySpawner* Spawner = Cast<AEnemySpawner>(Actor);
+        if (Spawner)
+        {
+            Spawner->SetSpawningEnabled(true);
+        }
+    }
 }
+
 

@@ -24,22 +24,30 @@ void AEnemySpawner::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	// Fire Projectiles
-	spawnTimer += DeltaTime;
-	if (spawnTimer > TimeBetweenEnemies)
+	if (IsSpawningEnabled)
 	{
-		FVector ALocation = FirstSpawnPosition -> GetActorLocation();  // Location of the first object
-		FVector BLocation = SecondsSpawnPosition -> GetActorLocation();  // Location of the second object
+		// Fire Projectiles
+		spawnTimer += DeltaTime;
+		if (spawnTimer > TimeBetweenEnemies)
+		{
+			FVector ALocation = FirstSpawnPosition->GetActorLocation();  // Location of the first object
+			FVector BLocation = SecondsSpawnPosition->GetActorLocation();  // Location of the second object
 
-		// Generate a random scalar value between 0 and 1
-		float RandomAlpha = FMath::FRand();  // Random value between 0.0 and 1.0
+			// Generate a random scalar value between 0 and 1
+			float RandomAlpha = FMath::FRand();  // Random value between 0.0 and 1.0
 
-		// Interpolate between the two positions using Lerp
-		FVector RandomPosition = FMath::Lerp(ALocation, BLocation, RandomAlpha);
+			// Interpolate between the two positions using Lerp
+			FVector RandomPosition = FMath::Lerp(ALocation, BLocation, RandomAlpha);
 
 
-		GetWorld()->SpawnActor<AActor>(Enemy, RandomPosition, GetActorRotation());
-		spawnTimer = 0.0f;
+			GetWorld()->SpawnActor<AActor>(Enemy, RandomPosition, GetActorRotation());
+			spawnTimer = 0.0f;
+		}
 	}
+}
+
+void AEnemySpawner::SetSpawningEnabled(bool enableSpawning)
+{
+	IsSpawningEnabled = enableSpawning;
 }
 

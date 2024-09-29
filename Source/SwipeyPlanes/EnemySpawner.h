@@ -40,7 +40,13 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Enemy Spawner")
 	AActor* SecondsSpawnPosition;
 
+	// Function to start/stop enemy spawning
+	UFUNCTION(BlueprintCallable, Category = "Enemy Spawner")
+	void SetSpawningEnabled(bool bEnableSpawning);
+
 private:
 	float spawnTimer;
+
+	bool IsSpawningEnabled;
 
 };

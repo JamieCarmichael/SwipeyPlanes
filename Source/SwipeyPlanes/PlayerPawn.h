@@ -31,6 +31,9 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Player Pawn")
 	int score = 0;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Player Pawn")
+	FVector SpawnPosition = FVector(0, 0, 0);
+
 
 protected:
 	// Called when the game starts or when spawned
@@ -54,7 +57,7 @@ public:
 
 	// Called when the player dies.
 	UFUNCTION(BlueprintCallable)
-	void OnPlayerDeath();
+	void OnPlayerDespawn();
 
 	// Called when the player spawns.
 	UFUNCTION(BlueprintCallable)
@@ -77,6 +80,8 @@ public:
 	float speed = 2.0f;
 
 private:
+
+	bool isActive = true;
 
 	FVector Destination = FVector(0, 0, 0);
 };
