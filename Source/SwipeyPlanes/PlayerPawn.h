@@ -53,8 +53,12 @@ public:
 	void PlayerAddScore(int newScore);
 
 	// Called when the player dies.
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 	void OnPlayerDeath();
+
+	// Called when the player spawns.
+	UFUNCTION(BlueprintCallable)
+	void OnPlayerSpawn();
 
 	// The Explosion.
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Player Pawn")

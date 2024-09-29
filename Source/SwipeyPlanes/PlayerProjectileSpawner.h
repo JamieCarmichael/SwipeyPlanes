@@ -37,6 +37,10 @@ public:
 	UFUNCTION()
 	void StopSpawning();
 
+	// Called when the player spawns.
+	UFUNCTION()
+	void StartSpawning();
+
 private:
 	float projectileTimer;
 

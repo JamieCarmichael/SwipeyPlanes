@@ -80,8 +80,6 @@ void APlayerPawn::PlayerAddScore(int newScore)
 
 void APlayerPawn::OnPlayerDeath()
 {
-
-
     // Hide the player character
     SetActorHiddenInGame(true);
 
@@ -93,5 +91,27 @@ void APlayerPawn::OnPlayerDeath()
 
     // Need to disable spawner
     ProjectileSpawner -> StopSpawning();
+}
+
+void APlayerPawn::OnPlayerSpawn()
+{
+    // Hide the player character
+    SetActorHiddenInGame(false);
+
+    // Disable collision
+    SetActorEnableCollision(true);
+
+    // Optionally disable tick
+    PrimaryActorTick.SetTickFunctionEnable(true);
+
+    // Need to disable spawner
+    ProjectileSpawner->StartSpawning();
+
+    // Set to centre of screen
+    FVector2D ScreenSize;
+    GEngine->GameViewport->GetViewportSize(ScreenSize);
+    FVector2D ScreenCenter = FVector2D(ScreenSize.X / 2.0f, ScreenSize.Y / 2.0f);
+    FVector CenterPos = FVector(-ScreenCenter.X, 0.0f, ScreenCenter.Y);
+    SetActorLocation(CenterPos);
 }
 
