@@ -8,6 +8,7 @@
 #include "PaperSpriteComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "EnemySpawner.h"
+#include "PickUpSingleton.h"
 
 // Sets default values
 APlayerPawn::APlayerPawn()
@@ -17,14 +18,36 @@ APlayerPawn::APlayerPawn()
 
     // Assuming the PaperSprite is already initialized or created
     PaperSprite = CreateDefaultSubobject<UPaperSpriteComponent>(TEXT("PlayerSprite"));
-    PaperSprite->SetupAttachment(RootComponent);
 
+    // Set the PaperSprite as the RootComponent
+    RootComponent = PaperSprite;  // Set the PaperSprite as the root
+
+    //PaperSprite->SetupAttachment(RootComponent);
 }
 
 // Called when the game starts or when spawned
 void APlayerPawn::BeginPlay()
 {
 	Super::BeginPlay();
+
+
+    if (ProjectileSpawner == nullptr)
+    {
+        UChildActorComponent* ChildActorComp = FindComponentByClass<UChildActorComponent>();
+
+        if (ChildActorComp)
+        {
+            // Get the actual child actor of the component
+            AActor* ChildActor = ChildActorComp->GetChildActor();
+
+            // Cast it to your desired class, e.g., AMyChildActorClass
+            APlayerProjectileSpawner* MyChildActor = Cast<APlayerProjectileSpawner>(ChildActor);
+            if (MyChildActor)
+            {
+                ProjectileSpawner = MyChildActor;
+            }
+        }
+    }
 
     OnPlayerDespawn();
 }
@@ -55,8 +78,10 @@ void APlayerPawn::Tick(float DeltaTime)
     if (!FMath::IsNearlyZero(Distance))
     {
         FVector direction = Destination - actorLocation;
-        
-        SetActorLocation(actorLocation + (direction * speed * DeltaTime));
+
+        FVector finalPoint = actorLocation + (direction * speed * DeltaTime);
+
+        SetActorLocation(finalPoint);
     }
 }
 
@@ -97,8 +122,9 @@ void APlayerPawn::OnPlayerDespawn()
     // disable tick
     PrimaryActorTick.SetTickFunctionEnable(false);
 
-    // Need to disable spawner
-    ProjectileSpawner -> StopSpawning();
+    // Need to disable spawner    
+    // Check if ProjectileSpawner is valid
+    ProjectileSpawner->StopSpawning();
 
     // Disable enemy spanwers
     TArray<AActor*> FoundSpawners;
@@ -148,6 +174,39 @@ void APlayerPawn::OnPlayerSpawn()
             Spawner->SetSpawningEnabled(true);
         }
     }
+
+    UPickUpSingleton::Get()->ResetActivePickUp();
 }
 
+void APlayerPawn::MoreProjectile()
+{
+    // add projectile 
+    UE_LOG(LogTemp, Log, TEXT("Add Projectile"));
+    ProjectilePowerUpTimer();
+
+    UPickUpSingleton::Get()->AddActivePickUp();
+}
+
+void APlayerPawn::RemoveProjectile()
+{
+    // remove projectile 
+    UE_LOG(LogTemp, Log, TEXT("Remove Projectile"));
+
+    UPickUpSingleton::Get()->RemoveActivePickUp();
+}
+
+
+void APlayerPawn::ProjectilePowerUpTimer()
+{
+    FTimerHandle TimerHandle;
+
+    // Get the world timer manager
+    GetWorld()->GetTimerManager().SetTimer(
+        TimerHandle,                               // The timer handle
+        this,                                      // The object that owns the function
+        &APlayerPawn::RemoveProjectile,            // Function to call
+        projectilePowerupTime,                     // Delay in seconds
+        false                                      // Whether the timer loops
+    );
+}
 

@@ -18,17 +18,17 @@ public:
 	APlayerPawn();
 
 	// touch input Action
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Player Pawn")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Player Pawn")
 	float TimeToMove = 3.0f;
 
 	// touch input Action
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Player Pawn")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Player Pawn")
 	int StartHealth = 5;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Player Pawn")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Player Pawn")
 	int health = 0;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Player Pawn")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Player Pawn")
 	int score = 0;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Player Pawn")
@@ -63,6 +63,18 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void OnPlayerSpawn();
 
+	// Add Projectiles.
+	UFUNCTION(BlueprintCallable)
+	void MoreProjectile();
+
+	// Add Projectiles.
+	UFUNCTION(BlueprintCallable)
+	void RemoveProjectile();
+
+	// Add Projectiles.
+	UFUNCTION(BlueprintCallable)
+	void ProjectilePowerUpTimer();
+
 	// The Explosion.
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Player Pawn")
 	TSubclassOf<class AActor> Explosion;
@@ -78,6 +90,10 @@ public:
 	// touch input Action
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Player Pawn")
 	float speed = 2.0f;
+
+	// touch input Action
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Player Pawn")
+	float projectilePowerupTime = 10.0f;
 
 private:
 

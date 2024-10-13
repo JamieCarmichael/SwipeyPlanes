@@ -6,7 +6,8 @@
 #include "PlayerProjectile.h"
 #include "ExplosionEffect.h"
 #include "PlayerPawn.h"
-#include <Kismet/GameplayStatics.h>
+#include "PickUpSingleton.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 AEnemyBasic::AEnemyBasic()
@@ -88,7 +89,23 @@ void AEnemyBasic::OnOverlapBegin(UPrimitiveComponent * OverlappedComponent, AAct
                 }
 
                 // Destroy this
+                // Spawn Explosion
                 GetWorld()->SpawnActor<AActor>(Explosion, GetActorLocation(), GetActorRotation());
+
+
+                // Get the singleton instance
+                UPickUpSingleton* Singleton = UPickUpSingleton::Get();
+                Singleton->EnemyDied();
+
+                // Spawn pick up
+                // Generate a random scalar value between 0 and 1
+                float RandomNumber = FMath::FRand();  // Random value between 0.0 and 1.0
+                if (RandomNumber < Singleton->PickUpProjectileChance())
+                {
+                    GetWorld()->SpawnActor<AActor>(PickUpProjectile, GetActorLocation(), GetActorRotation());
+                    Singleton->PickUpSpawned();
+                }
+
                 Destroy();
             }
 

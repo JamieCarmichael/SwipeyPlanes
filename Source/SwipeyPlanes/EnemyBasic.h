@@ -55,7 +55,9 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "EnemyDamage")
 	int pointsForKill = 10;
 
-
+	// The Pick Up Spawned.
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "EnemyPickUp")
+	TSubclassOf<class AActor> PickUpProjectile;
 
 private:
 	float lifeTimer = 0;
