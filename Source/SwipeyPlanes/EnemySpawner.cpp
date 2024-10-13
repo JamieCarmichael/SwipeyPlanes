@@ -16,7 +16,8 @@ void AEnemySpawner::BeginPlay()
 {
 	Super::BeginPlay();
 
-	spawnTimer = 0.0f;
+	timeToSpawn = TimeBetweenEnemies;
+	spawnTimer = 0.0f; 
 }
 
 // Called every frame
@@ -28,7 +29,7 @@ void AEnemySpawner::Tick(float DeltaTime)
 	{
 		// Fire Projectiles
 		spawnTimer += DeltaTime;
-		if (spawnTimer > TimeBetweenEnemies)
+		if (spawnTimer > timeToSpawn)
 		{
 			FVector ALocation = FirstSpawnPosition->GetActorLocation();  // Location of the first object
 			FVector BLocation = SecondsSpawnPosition->GetActorLocation();  // Location of the second object
@@ -39,9 +40,29 @@ void AEnemySpawner::Tick(float DeltaTime)
 			// Interpolate between the two positions using Lerp
 			FVector RandomPosition = FMath::Lerp(ALocation, BLocation, RandomAlpha);
 
+			float RandomNumber = FMath::FRand();  // Random value between 0.0 and 1.0
+			if (RandomNumber < 0.5)
+			{
+				GetWorld()->SpawnActor<AActor>(EnemyBasic, RandomPosition, GetActorRotation());
+			}			
+			else if (RandomNumber < 0.8)
+			{
+				GetWorld()->SpawnActor<AActor>(EnemyStrong, RandomPosition, GetActorRotation());
+			}			
+			else
+			{
+				GetWorld()->SpawnActor<AActor>(EnemyFollow, RandomPosition, GetActorRotation());
+			}
 
-			GetWorld()->SpawnActor<AActor>(Enemy, RandomPosition, GetActorRotation());
 			spawnTimer = 0.0f;
+			if (timeToSpawn > 0.1f)
+			{
+				timeToSpawn -= TimeReduction;
+			}
+			if (timeToSpawn < 0.1f)
+			{
+				timeToSpawn = 0.1f;
+			}
 		}
 	}
 }

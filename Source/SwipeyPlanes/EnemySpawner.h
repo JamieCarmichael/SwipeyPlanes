@@ -25,12 +25,22 @@ public:
 
 	// The projectile being spawned.
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Enemy Spawner")
-	TSubclassOf<class AActor> Enemy;
+	TSubclassOf<class AActor> EnemyBasic;
+	// The projectile being spawned.
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Enemy Spawner")
+	TSubclassOf<class AActor> EnemyStrong;
+	// The projectile being spawned.
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Enemy Spawner")
+	TSubclassOf<class AActor> EnemyFollow;
 
 
 	// How many seconds between projectiles spawning.
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Enemy Spawner")
 	float TimeBetweenEnemies = 1.0f;
+
+	// How many seconds between projectiles spawning.
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Enemy Spawner")
+	float TimeReduction = 0.01f;
 
 	// How many seconds between projectiles spawning.
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Enemy Spawner")
@@ -48,5 +58,7 @@ private:
 	float spawnTimer;
 
 	bool IsSpawningEnabled;
+
+	float timeToSpawn;
 
 };

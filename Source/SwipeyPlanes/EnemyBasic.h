@@ -27,6 +27,8 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	UBoxComponent* MyBoxComponent;
 
+	float lifeTimer = 0;
+
 public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -58,8 +60,5 @@ public:
 	// The Pick Up Spawned.
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "EnemyPickUp")
 	TSubclassOf<class AActor> PickUpProjectile;
-
-private:
-	float lifeTimer = 0;
 
 };
