@@ -95,6 +95,9 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Player Pawn")
 	float projectilePowerupTime = 10.0f;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Player Pawn")
+	int ProjectileCount = 1;
+
 private:
 
 	bool isActive = true;

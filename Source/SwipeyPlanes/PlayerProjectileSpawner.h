@@ -41,10 +41,17 @@ public:
 	UFUNCTION()
 	void StartSpawning();
 
+	// Spawn Multiple Projectiles.
+	UFUNCTION()
+	void SpawnProjectiles(int num);
+
+	int ProjectileCount = 1;
+
 private:
 	float projectileTimer;
 
 	// Controls whether the spawner is active or not
 	bool IsSpawnerActive = true;
+
 
 };

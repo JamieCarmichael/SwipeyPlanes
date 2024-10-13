@@ -21,8 +21,6 @@ APlayerPawn::APlayerPawn()
 
     // Set the PaperSprite as the RootComponent
     RootComponent = PaperSprite;  // Set the PaperSprite as the root
-
-    //PaperSprite->SetupAttachment(RootComponent);
 }
 
 // Called when the game starts or when spawned
@@ -181,8 +179,13 @@ void APlayerPawn::OnPlayerSpawn()
 void APlayerPawn::MoreProjectile()
 {
     // add projectile 
-    UE_LOG(LogTemp, Log, TEXT("Add Projectile"));
     ProjectilePowerUpTimer();
+    ProjectileCount++;
+    if (ProjectileCount > 10)
+    {
+        ProjectileCount = 10;
+    }
+    ProjectileSpawner->ProjectileCount = ProjectileCount;
 
     UPickUpSingleton::Get()->AddActivePickUp();
 }
@@ -190,7 +193,12 @@ void APlayerPawn::MoreProjectile()
 void APlayerPawn::RemoveProjectile()
 {
     // remove projectile 
-    UE_LOG(LogTemp, Log, TEXT("Remove Projectile"));
+    ProjectileCount--;
+    if (ProjectileCount < 1)
+    {
+        ProjectileCount = 1;
+    }
+    ProjectileSpawner->ProjectileCount = ProjectileCount;
 
     UPickUpSingleton::Get()->RemoveActivePickUp();
 }
