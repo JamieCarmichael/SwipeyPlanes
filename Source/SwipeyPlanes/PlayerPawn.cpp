@@ -77,7 +77,7 @@ void APlayerPawn::Tick(float DeltaTime)
     {
         FVector direction = Destination - actorLocation;
 
-        FVector finalPoint = actorLocation + (direction * speed * DeltaTime);
+        FVector finalPoint = actorLocation + FVector(0,0,2) + (direction * speed * DeltaTime);
 
         SetActorLocation(finalPoint);
     }
