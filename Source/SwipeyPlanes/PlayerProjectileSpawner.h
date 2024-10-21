@@ -47,6 +47,22 @@ public:
 
 	int ProjectileCount = 1;
 
+
+	// Sound played when projectile is fired.
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Projectile Spawner")
+	class USoundBase* FireProjectileSound;
+
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Projectile Spawner")
+	float FireProjectileVolume = 1.0f;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Projectile Spawner")
+	float FireProjectilePitchMin = 0.95f;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Projectile Spawner")
+	float FireProjectilePitchMax = 1.05f;
+	
+
 private:
 	float projectileTimer;
 

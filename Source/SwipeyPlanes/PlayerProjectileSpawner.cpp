@@ -2,6 +2,7 @@
 
 #include "PlayerProjectileSpawner.h"
 #include "PlayerProjectile.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 APlayerProjectileSpawner::APlayerProjectileSpawner()
@@ -9,6 +10,7 @@ APlayerProjectileSpawner::APlayerProjectileSpawner()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	FireProjectileSound = CreateDefaultSubobject<USoundBase>(TEXT("Shoot Sound"));
 }
 
 // Called when the game starts or when spawned
@@ -50,6 +52,9 @@ void APlayerProjectileSpawner::StartSpawning()
 
 void APlayerProjectileSpawner::SpawnProjectiles(int num)
 {
+	// Play sound effect when projectile is fired.
+	UGameplayStatics::PlaySound2D(GetWorld(), FireProjectileSound, FireProjectileVolume, FMath::RandRange(FireProjectilePitchMin, FireProjectilePitchMax));
+
 	switch (num)
 	{
 		case 1:

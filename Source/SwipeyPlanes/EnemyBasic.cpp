@@ -106,6 +106,9 @@ void AEnemyBasic::OnOverlapBegin(UPrimitiveComponent * OverlappedComponent, AAct
                     Singleton->PickUpSpawned();
                 }
 
+                // Play sound effect when enemy dies.
+                UGameplayStatics::PlaySound2D(GetWorld(), EnemyDeathSound, EnemyDeathVolume, FMath::RandRange(EnemyDeathPitchMin, EnemyDeathPitchMax));
+
                 Destroy();
             }
 

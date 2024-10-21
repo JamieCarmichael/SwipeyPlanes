@@ -98,6 +98,34 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Player Pawn")
 	int ProjectileCount = 1;
 
+
+	// Sound when player hit.
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Player Pawn")
+	class USoundBase* PlayerDamageSound;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Player Pawn")
+	float PlayerDamageVolume = 1.0f;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Player Pawn")
+	float PlayerDamagePitchMin = 0.95f;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Player Pawn")
+	float PlayerDamagePitchMax = 1.05f;
+
+
+	// Sound when player killed.
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Player Pawn")
+	class USoundBase* PlayerDeathSound;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Player Pawn")
+	float PlayerDeathVolume = 1.0f;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Player Pawn")
+	float PlayerDeathPitchMin = 0.95f;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Player Pawn")
+	float PlayerDeathPitchMax = 1.05f;
+
 private:
 
 	bool isActive = true;

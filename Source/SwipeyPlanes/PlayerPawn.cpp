@@ -98,7 +98,15 @@ void APlayerPawn::PlayerTakeDamage(int damage)
     {
         GetWorld()->SpawnActor<AActor>(Explosion, GetActorLocation(), GetActorRotation());
 
+        // Play sound effect when player dies.
+        UGameplayStatics::PlaySound2D(GetWorld(), PlayerDeathSound, PlayerDeathVolume, FMath::RandRange(PlayerDeathPitchMin, PlayerDeathPitchMax));
+
         OnPlayerDespawn();
+    }
+    else
+    {
+        // Play sound effect when player hit.
+        UGameplayStatics::PlaySound2D(GetWorld(), PlayerDamageSound, PlayerDamageVolume, FMath::RandRange(PlayerDamagePitchMin, PlayerDamagePitchMax));
     }
 }
 

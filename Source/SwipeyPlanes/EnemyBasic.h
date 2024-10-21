@@ -57,6 +57,19 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "EnemyDamage")
 	int pointsForKill = 10;
 
+	// Sound played when projectile is fired.
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "EnemyDamage")
+	class USoundBase* EnemyDeathSound;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "EnemyDamage")
+	float EnemyDeathVolume = 1.0f;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "EnemyDamage")
+	float EnemyDeathPitchMin = 0.95f;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "EnemyDamage")
+	float EnemyDeathPitchMax = 1.05f;
+
 	// The Pick Up Spawned.
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "EnemyPickUp")
 	TSubclassOf<class AActor> PickUpProjectile;
