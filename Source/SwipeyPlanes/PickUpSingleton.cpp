@@ -9,7 +9,7 @@ UPickUpSingleton::UPickUpSingleton()
 {
     pickUpSpawnChance = 0.0f;
     activeProjectilePickUps = 0;
-    ActivePickupReduction = 0.3f;
+    ActivePickupReduction = 0.25f;
     PickUpProjectileChanceAdd = 0.05f;
 }
 

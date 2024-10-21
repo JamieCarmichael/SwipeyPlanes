@@ -46,6 +46,7 @@ void APlayerProjectileSpawner::StopSpawning()
 
 void APlayerProjectileSpawner::StartSpawning()
 {
+	ProjectileCount = 1;
 	IsSpawnerActive = true;
 	PrimaryActorTick.bCanEverTick = true;
 }

@@ -70,5 +70,7 @@ void AEnemySpawner::Tick(float DeltaTime)
 void AEnemySpawner::SetSpawningEnabled(bool enableSpawning)
 {
 	IsSpawningEnabled = enableSpawning;
+	timeToSpawn = TimeBetweenEnemies;
+	spawnTimer = 0.0f;
 }
 
