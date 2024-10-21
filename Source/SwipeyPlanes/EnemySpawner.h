@@ -40,6 +40,10 @@ public:
 
 	// How many seconds between projectiles spawning.
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Enemy Spawner")
+	float TimeToReduce = 0.5f;
+
+	// How many seconds between projectiles spawning.
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Enemy Spawner")
 	float TimeReduction = 0.01f;
 
 	// How many seconds between projectiles spawning.
@@ -56,6 +60,8 @@ public:
 
 private:
 	float spawnTimer;
+
+	float reductionTimer;
 
 	bool IsSpawningEnabled;
 

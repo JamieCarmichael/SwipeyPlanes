@@ -17,7 +17,8 @@ void AEnemySpawner::BeginPlay()
 	Super::BeginPlay();
 
 	timeToSpawn = TimeBetweenEnemies;
-	spawnTimer = 0.0f; 
+	spawnTimer = 0.0f;
+	reductionTimer = 0.0f;
 }
 
 // Called every frame
@@ -29,6 +30,7 @@ void AEnemySpawner::Tick(float DeltaTime)
 	{
 		// Fire Projectiles
 		spawnTimer += DeltaTime;
+		reductionTimer += DeltaTime;
 		if (spawnTimer > timeToSpawn)
 		{
 			FVector ALocation = FirstSpawnPosition->GetActorLocation();  // Location of the first object
@@ -55,14 +57,16 @@ void AEnemySpawner::Tick(float DeltaTime)
 			}
 
 			spawnTimer = 0.0f;
+		}
+
+		if (reductionTimer > TimeToReduce)
+		{
 			if (timeToSpawn > 0.1f)
 			{
 				timeToSpawn -= TimeReduction;
 			}
-			if (timeToSpawn < 0.1f)
-			{
-				timeToSpawn = 0.1f;
-			}
+
+			reductionTimer = 0.0f;
 		}
 	}
 }
@@ -71,6 +75,7 @@ void AEnemySpawner::SetSpawningEnabled(bool enableSpawning)
 {
 	IsSpawningEnabled = enableSpawning;
 	timeToSpawn = TimeBetweenEnemies;
-	spawnTimer = 0.0f;
+	spawnTimer = 0.0f; 
+	reductionTimer = 0.0f;
 }
 
